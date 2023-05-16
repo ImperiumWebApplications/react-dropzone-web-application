@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import AWS from 'aws-sdk';
+import { List, ListItem, ListItemText, Button, Box } from '@mui/material';
+import GetAppIcon from '@mui/icons-material/GetApp';
 
 const S3_BUCKET_NAME = process.env.REACT_APP_S3_BUCKET_NAME;
 const S3_REGION = process.env.REACT_APP_S3_REGION;
@@ -61,7 +63,14 @@ function FileDropzone() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
-    <div>
+    <Box
+      sx={{
+        border: '1px solid grey',
+        borderRadius: '4px',
+        padding: '16px',
+        marginTop: '16px',
+      }}
+    >
       <div {...getRootProps()}>
         <input {...getInputProps()} />
         {isDragActive ? (
@@ -70,12 +79,23 @@ function FileDropzone() {
           <p>Drag 'n' drop some files here, or click to select files</p>
         )}
       </div>
-      <ul>
+      <List>
         {files.map((file, index) => (
-          <li key={index}><a href={file.url} target="_blank" rel="noopener noreferrer">{file.name}</a></li>
+          <ListItem key={index}>
+            <ListItemText primary={file.name} />
+            <Button
+              variant="contained"
+              startIcon={<GetAppIcon />}
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Box>
   );
 }
 
